@@ -11,6 +11,8 @@ The algorithm was developed with:
 - Scikit-learn 0.21.2
 
 ## References:
-Zappa, M., F. Fundel and S. Jaun, 2013: A ‘peak-box’approach for supporting
+Zappa, M.; F. Fundel and S. Jaun, 2013: A ‘peak-box’approach for supporting
 interpretation and verification of operational ensemble peak-flow forecasts, Hy-
 drological Processes, 27, (1), 117–131
+
+Giordani, A.; Zappa, M. and Rotach, M.W., 2019: Estimating Ensemble Flood Forecasts’ Uncertainty: A Novel “Peak-Box” Approach for Detecting Multiple Peak-Flow Events. Atmosphere 2020, 11, 2.
