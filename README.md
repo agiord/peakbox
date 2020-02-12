@@ -1,6 +1,6 @@
 # The peak-box approach
 
-This repository contains the script developed for the peak-box approach able to detect multiple peak flow events (link to the paper: https://www.mdpi.com/2073-4433/11/1/2), which is compared to the original peak-box approach developed by Zappa et al. 2013. The file `peakbox_v4.py` contains the actual script, while the jupyter-notebook `peakbox_notebook.ipynb` contains its application to one model initialization. 
+This repository contains the script developed for the peak-box approach able to detect multiple peak flow events (link to the paper: https://www.mdpi.com/2073-4433/11/1/2), which is compared to the original peak-box approach developed by Zappa et al. 2013. The file `peakbox_v5.py` contains the actual script, while the jupyter-notebook `peakbox_notebook.ipynb` contains its application to one model initialization. 
 ##
 The algorithm was developed with:
 - Python 3.6
