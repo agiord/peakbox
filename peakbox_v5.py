@@ -18,6 +18,8 @@ from scipy.spatial import distance
 
 from sklearn.cluster import KMeans
 
+import seaborn as sns
+
 
 def peak_box_multipeaks(ens, obs, sim_start):
     """
@@ -377,14 +379,20 @@ def peak_box_multipeaks(ens, obs, sim_start):
     # plot all peaks in different groups as coloured solid dots:
     colors = itertools.cycle(["#e60000", "#0000e6", "#e6e600", "#bf00ff", "#009933", "#b35900"])
     
+    #pal = sns.hls_palette( 8, l=.5, s=.8)
+    #colors = itertools.cycle(['#e619d9', '#8B6200', '#e62619', '#1940e6', '#8c19e6', '#08A539']) 
+                
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10,8), dpi=100)
         
     ax1 = plt.subplot2grid((2,1), (0,0), rowspan=1, colspan=1)
     ax2 = plt.subplot2grid((2,1), (1,0), rowspan=1, colspan=1, sharex=ax1)
     
+    
     ax1.spines["bottom"].set_visible(False)
     ax1.tick_params(axis='x', length=0)
-    ax1.tick_params(axis='x', which='both', bottom=True, top=False, labelbottom=False)  
+    ax1.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=False, labelsize=13)
+    ax2.tick_params(axis='both', which='both', labelsize=13)
+    ax2.set_xlabel('Time [yyyy-mm-dd]', fontsize=18)
     fig.subplots_adjust(hspace=0)
     
     for member in ens.columns[~ens.columns.isin(['date'])]:
@@ -540,7 +548,8 @@ def peak_box_multipeaks(ens, obs, sim_start):
     i_group = 0
     
     colors = itertools.cycle(["#e60000", "#0000e6", "#e6e600", "#bf00ff", "#009933", "#b35900"])
-    
+    #colors = itertools.cycle(['#e619d9', '#8B6200', '#e62619', '#1940e6', '#8c19e6', '#08A539']) 
+                
     for group in peak_groups.keys():
         
         color = next(colors)
@@ -697,7 +706,7 @@ def peak_box_multipeaks(ens, obs, sim_start):
     ax2.grid(True)
     
     
-    fig.text(0.07, 0.5, 'Discharge [m$^3$ s$^{-1}$]', va='center', rotation='vertical', fontsize=13)
+    fig.text(0.05, 0.5, 'Discharge [m$^3$ s$^{-1}$]', va='center', rotation='vertical', fontsize=18)
 
     #x axis ticks and limits
     days = mdates.DayLocator()
@@ -717,15 +726,16 @@ def peak_box_multipeaks(ens, obs, sim_start):
     datemax = np.datetime64(ens.date[119], 'm') + np.timedelta64(25, 'm')
     ax2.set_xlim(datemin, datemax)
     ax1.set_xlim(datemin, datemax)
-    ax1.set_ylim(0, )
+    #ax1.set_ylim(0, 99)
+    #ax2.set_ylim(0, 99)
     
     # Shrink current axis by 20%
-    box1 = ax1.get_position()
-    box2 = ax2.get_position()
-    ax1.set_position([box1.x0, box1.y0, box1.width * 0.8, box1.height])
-    ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
+    #box1 = ax1.get_position()
+    #box2 = ax2.get_position()
+    #ax1.set_position([box1.x0, box1.y0, box1.width * 0.8, box1.height])
+    #ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
     
-    fig.suptitle(f'Peak-box approach for initialization {sim_start}', y=0.925)
+    fig.suptitle(f'Initialization: {sim_start}', y=0.925, fontsize=22)
     
     #Add warning levels lines: WL1 (), WL2, WL3 ???
     """
@@ -734,13 +744,13 @@ def peak_box_multipeaks(ens, obs, sim_start):
     """
     
     #Legend:
-    fig.legend(handles=[runoff_member[0], l2[0], peak_member[0], median_value[0], c_median_value[0], peak_obs[0]], ncol=1, 
-               loc=(0.72,0.7525), numpoints = 1,
-           labels=['Runoff member', 'Runoff obs', '($t_i$, $p_i$) peaks of 1 group', '($t_{50}$, $p_{50}$) of 1 group', 
-                   '($t_{50}$, $p_{50}$) (Zappa et al. 2013)', '($t_{obs}$, $p_{obs}$)']); #loc=(0.66,0.66)
+    #fig.legend(handles=[runoff_member[0], l2[0], peak_member[0], median_value[0], c_median_value[0], peak_obs[0]], ncol=1, 
+    #           loc=(0.0985,0.728), numpoints = 1,
+    #       labels=['Runoff member', 'Runoff obs', '($t_i$, $p_i$) peaks of 1 PBM group', '($t_{50}$, $p_{50}$) of 1 PBM group', 
+    #               '($t_{50}$, $p_{50}$) PBC', '($t_{obs}$, $p_{obs}$)'], fontsize=12); #loc=(0.66,0.66)
         
-    plt.rcParams.update({'font.size': 11});
-    
+    #plt.rcParams.update({'font.size': 11});
+    """
     #Tables for sharpness and verification for every group:
     if len(box_volumes) == 1:
         sharpness_table=r"\begin{tabular}{ c | c | c } \multicolumn{3}{c}{\textbf{Sharpness [mm]}} \\ & PB$_{FULL}$ [mm] & PB$_{IQR}$ [mm] \\\hline \textbf{Classic} & {%.2f} & {%.2f} \\\hline \textbf{Group 1} & {%.2f} & {%.2f} \end{tabular}" % (c_sharpness_pb, c_sharpness_iqr, sharpness['pb'][0], sharpness['iqr'][0])
@@ -760,11 +770,11 @@ def peak_box_multipeaks(ens, obs, sim_start):
     
     plt.text(1.0, 0.5, sharpness_table, ha="left", va="bottom", transform=ax2.transAxes, size=10)
     plt.text(1.0, 0.0, verification_table, ha="left", va="bottom", transform=ax2.transAxes, size=10)
-    
-    ax1.text(0.992, 0.98, 'Classic', ha="right", va="top", transform=ax1.transAxes, size=12, 
+    """
+    ax1.text(0.992, 0.98, 'PBC', ha="right", va="top", transform=ax1.transAxes, size=15, 
              bbox=dict(facecolor='#32AAB5',edgecolor='none', alpha=0.3))
     
-    ax2.text(0.992, 0.98, 'Multiple events', ha="right", va="top", transform=ax2.transAxes, size=12, 
+    ax2.text(0.992, 0.98, 'PBM', ha="right", va="top", transform=ax2.transAxes, size=15, 
              bbox=dict(facecolor='#32AAB5',edgecolor='none', alpha=0.3))
 
     return plt.show()
